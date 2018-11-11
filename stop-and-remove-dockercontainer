@@ -3,6 +3,7 @@
 # Check if parameter is set
 if [ -z "$1" ]; then
 	echo "Missing parameter; Proper usage: 'stop-and-remove-dockercontainer <docker container name>'"
+	exit 1
 fi
 
 CONTAINERNAME=$1
@@ -14,3 +15,5 @@ fi
 if [ "$(docker ps -q -f name=$CONTAINERNAME -f status=exited)" ]; then
 	docker rm $CONTAINERNAME
 fi
+
+exit 0

@@ -1,0 +1,3 @@
+#! /bin/bash
+
+docker run -d -p 3436:2222 --name zorgportaal-be zorgportaal-backend

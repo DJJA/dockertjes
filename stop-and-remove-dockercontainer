@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
 	echo "Missing parameter; Proper usage: 'stop-and-remove-dockercontainer <docker container name>'"
 fi
 
-CONTAINERNAME="$1
+CONTAINERNAME=$1
 
 if [ $(docker inspect -f '{{.State.Running}}' $CONTAINERNAME) = "true" ]; then
 	docker stop $CONTAINERNAME

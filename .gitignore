@@ -1,0 +1,5 @@
+*.jar
+*.tar.gz
+angular/build/
+angular/html/
+angular/build-weekmenu

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+CONTAINERNAME="weekmenu-backend"
+
+if [ $(docker inspect -f '{{.State.Running}}' $CONTAINERNAME) = "true" ]; then
+	docker stop $CONTAINERNAME
+fi
+
+if [ "$(docker ps -q -f name=$CONTAINERNAME -f status=exited)" ]; then
+	docker rm $CONTAINERNAME
+fi

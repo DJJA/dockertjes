@@ -1,0 +1,19 @@
+FROM maven-jdk8u181
+
+ARG gitlink
+ARG java_app=weekmenu-1.0-SNAPSHOT.jar
+ARG java_app_runpath=/root/weekmenu/
+
+RUN mkdir -p ${java_app_runpath}
+
+RUN git clone ${gitlink} ${java_app_runpath}
+
+RUN mvn -f ${java_app_runpath}pom.xml clean package
+
+EXPOSE 2222
+
+RUN ls -lha ${java_app_runpath}target/
+
+# CMD ["java", "-jar", "${java_app_runpath}target/${java_app}"]
+# CMD ["java", "-jar", "/root/weekmenu/target/weekmenu-1.0-SNAPSHOT.jar"]
+CMD mvn -f /root/weekmenu/ exec:java -Dexec.mainClass="rest.RESTEmbeddedJetty" -s "/usr/share/maven/ref/settings-docker.xml"

@@ -1,0 +1,16 @@
+FROM ubuntu:18.04
+MAINTAINER Dirk-Jan de Beijer
+
+ARG java_version=jre1.8.0_181
+ARG java_tarball=jre-8u181-linux-x64.tar.gz
+ARG java_install_location=/usr/lib/jvm/
+
+COPY ./${java_tarball} /tmp/
+
+RUN mkdir -p ${java_install_location}
+
+RUN tar zxvf /tmp/${java_tarball} -C ${java_install_location}
+
+RUN rm /tmp/${java_tarball}
+
+ENV PATH "$PATH:${java_install_location}${java_version}/bin"

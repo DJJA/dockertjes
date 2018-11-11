@@ -1,0 +1,27 @@
+FROM ubuntu:18.04
+MAINTAINER Dirk-Jan de Beijer
+
+COPY ./jdk-8u181-linux-x64.tar.gz /tmp/
+
+RUN mkdir -p /usr/lib/jvm
+
+RUN tar zxvf /tmp/jdk-8u181-linux-x64.tar.gz -C /usr/lib/jvm/
+
+RUN rm /tmp/jdk-8u181-linux-x64.tar.gz
+
+RUN apt-get update
+
+RUN apt-get install -y wget unzip
+
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN wget -P /tmp/ http://download.oracle.com/glassfish/5.0/release/glassfish-5.0.zip
+
+RUN unzip /tmp/glassfish-5.0.zip -d /root
+
+RUN rm /tmp/glassfish-5.0.zip
+
+ENV PATH "$PATH:/usr/lib/jvm/jdk1.8.0_181/bin:/root/glassfish5/bin"
+
+EXPOSE 8080 4848

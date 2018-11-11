@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo docker run -d -p 51111:8080 -v /var/dockerdata/jenkinshome:/var/jenkins_home jenkins-with-jdk

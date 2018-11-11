@@ -1,0 +1,60 @@
+#! /bin/bash
+
+# What if the Angular image is outdated?
+
+# Check if all parameters have been supplied
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Missing parameter(s); Proper usage: 'buildApp <docker image name> <git repo link>'"
+	exit 1
+fi
+
+# Declare and initialize variables
+DOCKERIMAGENAME=$1
+GITREPOLINK=$2
+BUILDFOLDER=$(pwd)/build
+HTMLFOLDER=$(pwd)/html
+
+# Create build folder if it doesn't exist
+if [ ! -d "$BUILDFOLDER" ]; then
+	mkdir -p $BUILDFOLDER
+fi
+# Empty build folder if it's not empty
+if [ ! -z "$(ls -A $BUILDFOLDER)" ]; then
+	rm -rf $BUILDFOLDER/{*,.*}
+fi
+
+# Build Angular app with docker container
+docker run -v $(pwd)/build:/root/app -it angular /bin/bash -c "\
+	mkdir -p /root/app/; \
+	rm -rf /root/app/*; \
+	git clone $GITREPOLINK /root/app/; \
+	cd /root/app/; \
+	npm install; \
+	npm run main_build; \
+	"
+
+# Declare built app folder
+OUTPUTFOLDER="$BUILDFOLDER/dist/$(ls -A $BUILDFOLDER/dist/)" # Assuming there's only 1 folder in the dist folder
+
+# Create html folder if it doesn't exist
+if [ ! -d "$HTMLFOLDER" ]; then
+	mkdir -p $HTMLFOLDER
+fi
+# Empty html folder if it's not empty
+if [ ! -z "$(ls -A $HTMLFOLDER)" ]; then
+	rm -rf $HTMLFOLDER/{*,.*}
+fi
+
+# Move built Angular project to HTML folder
+mv $OUTPUTFOLDER/* $HTMLFOLDER/
+
+# Clean build folder
+rm -rf $BUILDFOLDER/{*,.*}
+
+# Build docker container with nginx for hosting the app
+docker build --no-cache -t $DOCKERIMAGENAME -f $(pwd)/dockerfile.nginx .
+
+# Clean html folder
+rm -rf $HTMLFOLDER/{*,.*}
+
+exit 0

@@ -1,0 +1,11 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+copy ./jdk-8u181-linux-x64.tar.gz /tmp/
+
+RUN tar zxvf /tmp/jdk-8u181-linux-x64.tar.gz -C /usr/lib/jvm/
+
+RUN rm /tmp/jdk-8u181-linux-x64.tar.gz
+
+USER ${jenkins}

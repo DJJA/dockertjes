@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker build --no-cache -t zorgportaal-backend .
+docker build --no-cache -t zorgportaal-backend --build-arg git_link=https://github.com/DJJA/Zorgportaal-Back_End.git .

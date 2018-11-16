@@ -1,11 +1,11 @@
 FROM maven-jdk8u181
 
-ARG gitlink
+ARG git_link
 ARG java_app_runpath=/root/app/
 
 RUN mkdir -p ${java_app_runpath}
 
-RUN git clone ${gitlink} ${java_app_runpath}
+RUN git clone ${git_link} ${java_app_runpath}
 
 RUN mvn -f ${java_app_runpath}pom.xml clean package
 

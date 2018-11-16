@@ -8,12 +8,20 @@ fi
 
 CONTAINERNAME=$1
 
-if [ $(docker inspect -f '{{.State.Running}}' $CONTAINERNAME) = "true" ]; then
-	docker stop $CONTAINERNAME
-fi
-
-if [ "$(docker ps -q -f name=$CONTAINERNAME -f status=exited)" ]; then
+# Check if the container exists
+if [ "$(docker ps -a -q -f name=$CONTAINERNAME)" ]; then
+	echo "Container $CONTAINERNAME exists"
+	# Check if container is running
+	if [ "$(docker ps -q -f name=$CONTAINERNAME -f status=running)" ]; then
+		echo "Container $CONTAINERNAME is running. Stopping it now..."
+		docker stop $CONTAINERNAME
+	else
+		echo "Container $CONTAINERNAME is not running"
+	fi
+	echo "Removing container $CONTAINERNAME..."
 	docker rm $CONTAINERNAME
+else
+	echo "Container $CONTAINERNAME does not exist"
 fi
 
 exit 0

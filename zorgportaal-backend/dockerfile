@@ -11,4 +11,4 @@ RUN mvn -f ${java_app_runpath}pom.xml clean package
 
 EXPOSE 2222
 
-CMD mvn -f ${java_app_runpath} exec:java -Dexec.mainClass="rest.RESTEmbeddedJetty" -s "/usr/share/maven/ref/settings-docker.xml"
+CMD mvn -f /root/app/pom.xml exec:java -Dexec.mainClass="rest.RESTEmbeddedJetty" -s "/usr/share/maven/ref/settings-docker.xml"
